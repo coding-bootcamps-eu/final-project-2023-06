@@ -6,20 +6,51 @@
 
     <input v-model="imageUrl" placeholder="Paste Image URL here" />
 
-    <div v-if="imageUrl">
+    <div id="my-node" v-if="imageUrl" class="imageURL">
       <img :src="imageUrl" alt="Selected Image" />
+      <textarea
+        class="combinedText"
+        v-model="combinedText"
+        placeholder="Enter Text"
+      ></textarea>
+    </div>
+    <button @click="generateMeme">Generate Meme</button>
+
+    <div v-if="generatedMeme">
+      <img :src="generatedMeme" alt="Generated Meme" />
+      <button @click="downloadMeme">Download Meme</button>
     </div>
   </div>
 </template>
-
 <script>
-// @ is an alias to /src
-// import HelloWorld from "@/components/HelloWorld.vue";
+import download from "downloadjs";
+import * as htmlToImage from "html-to-image";
 
 export default {
-  name: "HomeView",
-  components: {
-    // HelloWorld,
+  data() {
+    return {
+      imageUrl: "",
+      combinedText: "",
+      generatedMeme: null,
+    };
+  },
+  methods: {
+    generateMeme() {
+      htmlToImage
+        .toPng(document.getElementById("my-node"))
+        .then(function (dataUrl) {
+          download(dataUrl, "my-node.png");
+        });
+    },
   },
 };
 </script>
+<style scoped>
+.imageURL {
+  position: relative;
+}
+
+.combinedText {
+  position: absolute;
+}
+</style>

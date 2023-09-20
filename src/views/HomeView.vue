@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <img alt="Our logo here" src="" />
+    <img alt="Our logo here" src="../assets/meme-wizard-logo.png" />
     <h1>Welcome to Meme Wizard</h1>
     <p>Create hilarious memes with our easy-to-use tool.</p>
 
@@ -19,7 +19,9 @@
           placeholder="Enter Text"
         ></textarea>
       </div>
-      <button @click="generateMeme">Generate Meme</button>
+      <button @click="generateMeme" class="generate-button">
+        Generate Meme
+      </button>
 
       <div v-if="generatedMeme">
         <img :src="generatedMeme" alt="Generated Meme" />
@@ -55,6 +57,7 @@ export default {
 .main-area {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 .imageURL {
   position: relative;
@@ -72,12 +75,33 @@ export default {
   color: white;
   text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black,
     1px 1px 0 black;
-  bottom: 10px;
-  transform: translateX(-50%);
-  width: 80%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   padding: 10px;
   border: 1px solid #000;
   background-color: transparent;
   border-color: transparent;
+  box-sizing: border-box;
+  resize: none;
+}
+
+.generate-button {
+  background-color: #6a1cc3;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  max-width: 12.5rem;
+}
+.generate-button:hover {
+  background-color: #9eb3c2;
+}
+.generate-button:focus {
+  outline: none;
+  box-shadow: 0 0 3px 2px rgba(0, 123, 255, 0.5);
 }
 </style>

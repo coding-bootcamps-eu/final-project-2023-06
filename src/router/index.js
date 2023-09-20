@@ -16,9 +16,14 @@ const routes = [
     component: () => import("../views/AboutView.vue"),
   },
   {
-    path: "/top100",
-    name: "top100",
-    component: () => import("../views/Top100View.vue"),
+    path: "/template",
+    name: "template",
+    component: () => import("../views/TemplateView.vue"),
+  },
+  {
+    path: "/new",
+    name: "new",
+    component: () => import("../views/NewView.vue"),
   },
 ];
 

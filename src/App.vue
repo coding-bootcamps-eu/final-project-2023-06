@@ -1,7 +1,8 @@
 <template>
   <nav>
     <router-link to="/">Generate Meme</router-link> |
-    <router-link to="/top100">Top 100 Memes</router-link> |
+    <router-link to="/template">Templates</router-link> |
+    <router-link to="/new">New Memes</router-link> |
     <router-link to="/about">About Us</router-link>
   </nav>
   <router-view />

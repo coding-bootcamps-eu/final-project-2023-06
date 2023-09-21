@@ -15,14 +15,44 @@
         <img :src="imageUrl" alt="Selected Image" />
         <textarea
           class="combinedText"
+          :style="{
+            color: textColor,
+            top: y + 'px',
+            left: x + 'px',
+            fontFamily: selectedFont,
+            fontSize: selectedFontSize + 'px',
+          }"
           v-model="combinedText"
           placeholder="Enter Text"
         ></textarea>
+        <label for="font-select">Select Font:</label>
+        <select v-model="selectedFont" id="font-select">
+          <option value="Arial">Arial</option>
+          <option value="Verdana">Verdana</option>
+          <option value="Helvetica">Helvetica</option>
+          <option value="Times New Roman">Times New Roman</option>
+          <option value="Roboto">Roboto</option>
+          <option value="Open Sans">Open Sans</option>
+          <option value="Calibri">Calibri</option>
+        </select>
+
+        <label for="fontsize-select">Select Font Size:</label>
+        <select v-model="selectedFontSize" id="fontsize-select">
+          <option value="10">10px</option>
+          <option value="12">12px</option>
+          <option value="16">16px</option>
+          <option value="18">18px</option>
+          <option value="20">20px</option>
+          <option value="22">22px</option>
+          <option value="24">24px</option>
+        </select>
       </div>
       <button @click="generateMeme" class="generate-button">
         Generate Meme
       </button>
-
+      <input type="color" v-model="textModel" />
+      <input type="range" v-model="x" />
+      <input type="range" v-model="y" />
       <div v-if="generatedMeme">
         <img :src="generatedMeme" alt="Generated Meme" />
         <button @click="downloadMeme">Download Meme</button>
@@ -40,6 +70,11 @@ export default {
       imageUrl: "",
       combinedText: "",
       generatedMeme: null,
+      textColor: "#ffffff",
+      x: 0,
+      y: 0,
+      selectedFont: "Arial",
+      selectedFontSize: `10`,
     };
   },
   methods: {
@@ -72,9 +107,9 @@ export default {
 
 .combinedText {
   position: absolute;
-  color: white;
-  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black,
-    1px 1px 0 black;
+  color: black;
+  text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white,
+    1px 1px 0 white;
   top: 0;
   left: 0;
   width: 100%;
@@ -103,5 +138,10 @@ export default {
 .generate-button:focus {
   outline: none;
   box-shadow: 0 0 3px 2px rgba(0, 123, 255, 0.5);
+}
+
+#font-select,
+#fontsize-select {
+  margin-right: 10px;
 }
 </style>

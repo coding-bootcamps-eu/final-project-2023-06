@@ -5,11 +5,7 @@
     <p>Create hilarious memes with our easy-to-use tool.</p>
 
     <div class="main-area">
-      <input
-        v-model="imageUrl"
-        id="uploadURL"
-        placeholder="Paste Image URL here"
-      />
+      <input v-model="imageUrl" id="uploadURL" placeholder="Paste Image URL here" />
 
       <div id="my-node" v-if="imageUrl" class="imageURL">
         <img :src="imageUrl" alt="Selected Image" />
@@ -20,7 +16,7 @@
             top: y + '%',
             left: x + '%',
             fontFamily: selectedFont,
-            fontSize: selectedFontSize + 'px',
+            fontSize: selectedFontSize + 'px'
           }"
           v-model="combinedText"
           placeholder="Enter Text"
@@ -50,9 +46,7 @@
         <option value="28">28px</option>
         <option value="30">30px</option>
       </select>
-      <button @click="generateMeme" class="generate-button">
-        Generate Meme
-      </button>
+      <button @click="generateMeme" class="generate-button">Generate Meme</button>
       <input type="color" v-model="textColor" />
       <input type="range" v-model="x" />
       <input type="range" v-model="y" />
@@ -64,34 +58,33 @@
   </div>
 </template>
 <script>
-import download from "downloadjs";
-import * as htmlToImage from "html-to-image";
+import download from 'downloadjs'
+import * as htmlToImage from 'html-to-image'
 
 export default {
   data() {
     return {
-      imageUrl: "",
-      combinedText: "",
+      imageUrl: '',
+      combinedText: '',
       generatedMeme: null,
-      textColor: "#ffffff",
+      textColor: '#ffffff',
       x: 0,
       y: 0,
-      selectedFont: "Arial",
-      selectedFontSize: `10`,
-    };
+      selectedFont: 'Arial',
+      selectedFontSize: `10`
+    }
   },
   methods: {
     generateMeme() {
-      htmlToImage
-        .toPng(document.getElementById("my-node"))
-        .then(function (dataUrl) {
-          download(dataUrl, "my-node.png");
-        });
-    },
-  },
-};
+      htmlToImage.toPng(document.getElementById('my-node')).then(function (dataUrl) {
+        download(dataUrl, 'my-node.png')
+      })
+    }
+  }
+}
 </script>
 <style scoped>
+@import url(https://fonts.bunny.net/css?family=acme:400|open-sans:600|quicksand:400|roboto:400);
 .main-area {
   display: flex;
   flex-direction: column;
@@ -100,6 +93,11 @@ export default {
 .imageURL {
   position: relative;
   display: inline-block;
+  overflow: hidden;
+}
+
+h1 {
+  font-family: 'Acme', sans-serif;
 }
 
 #uploadURL {
@@ -111,8 +109,7 @@ export default {
 .combinedText {
   position: absolute;
   color: black;
-  text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white,
-    1px 1px 0 white;
+  text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
   top: 0;
   left: 0;
   width: 100%;

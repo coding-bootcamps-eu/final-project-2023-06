@@ -2,15 +2,17 @@
   <div class="memes-container">
     <h1>Meme templates you can use</h1>
     <div class="memes-grid">
-      <div v-for="meme in memes" :key="meme.id" class="memes-item">
-        <h2>{{ meme.name }}</h2>
-        <img
-          :src="meme.url"
-          :alt="meme.name"
-          :width="meme.width"
-          :height="meme.height"
-          class="meme-image"
-        />
+      <div v-for="meme in memes" :key="meme.id" class="memes-items">
+        <div class="memes-cards">
+          <h2>{{ meme.name }}</h2>
+          <img
+            :src="meme.url"
+            :alt="meme.name"
+            :width="meme.width"
+            :height="meme.height"
+            class="meme-image"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -44,41 +46,34 @@ export default {
 
 <style scoped>
 .memes-grid {
-  --gap: 5rem;
+  --gap: 3rem;
   --num-cols: 3;
-  --row-height: 300px;
   box-sizing: border-box;
-  padding: var(--gap);
   display: grid;
-  grid-template-columns: repeat(var(--num-cols), 1fr);
-  grid-auto-rows: var(--row-height);
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  padding: var(--gap);
   gap: var(--gap);
 }
 
 .memes-grid img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: 0.5s ease-in-out;
+  object-fit: contain;
 }
 
-.memes-item {
-  margin-bottom: 1rem;
+.memes-items {
+  display: flex;
+  align-items: flex-start;
+  background-color: hsla(268, 75%, 50%, 0.4);
+  padding: 0.5rem;
+  border-radius: 0.75rem;
 }
+/*
+background-color ist nur zu Testzwecken
 
-@media screen and (max-width: 1024px) {
-  .memes-grid {
-    --num-cols: 2;
-  }
-}
-
-@media screen and (max-width: 540px) {
-  .memes-grid {
-    --num-cols: 1;
-  }
-
-  h2 {
-    font-size: 0.9rem;
-  }
+todo: cards auf erinheitliche größe anpassen
+*/
+.memes-cards {
 }
 </style>

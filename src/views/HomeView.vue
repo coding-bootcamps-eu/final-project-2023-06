@@ -4,7 +4,7 @@
     <h1>Welcome to Meme Wizard</h1>
     <p>Create hilarious memes with our easy-to-use tool.</p>
 
-    <div class="image-grid">
+    <div class="grid">
       <img
         src="https://i.imgflip.com/1g8my4.jpg"
         @click="showImage('https://i.imgflip.com/1g8my4.jpg')"
@@ -49,6 +49,37 @@
 
     <div class="main-area">
       <input v-model="imageUrl" id="uploadURL" placeholder="Paste Image URL here" />
+      <label for="font-select">Select Font:</label>
+      <select v-model="selectedFont" id="font-select">
+        <option value="Arial">Arial</option>
+        <option value="Verdana">Verdana</option>
+        <option value="Helvetica">Helvetica</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Roboto">Roboto</option>
+        <option value="Open Sans">Open Sans</option>
+        <option value="Calibri">Calibri</option>
+        <option value="Abel">Abel</option>
+      </select>
+
+      <label for="fontsize-select">Select Font Size:</label>
+      <select v-model="selectedFontSize" id="fontsize-select">
+        <option value="16">16px</option>
+        <option value="20">20px</option>
+        <option value="24">24px</option>
+        <option value="28">28px</option>
+        <option value="32">32px</option>
+        <option value="36">36px</option>
+        <option value="40">40px</option>
+      </select>
+      <button @click="generateMeme" class="generate-button">Generate Meme</button>
+      <input type="color" v-model="textColor" />
+      <input type="range" v-model="x" />
+      <input type="range" v-model="y" />
+      <div v-if="generatedMeme">
+        <img :src="generatedMeme" alt="Generated Meme" />
+        <button @click="downloadMeme">Download Meme</button>
+      </div>
+
       <div
         :style="{
           height:
@@ -91,37 +122,6 @@
             ></textarea>
           </div>
         </div>
-      </div>
-
-      <label for="font-select">Select Font:</label>
-      <select v-model="selectedFont" id="font-select">
-        <option value="Arial">Arial</option>
-        <option value="Verdana">Verdana</option>
-        <option value="Helvetica">Helvetica</option>
-        <option value="Times New Roman">Times New Roman</option>
-        <option value="Roboto">Roboto</option>
-        <option value="Open Sans">Open Sans</option>
-        <option value="Calibri">Calibri</option>
-        <option value="Abel">Abel</option>
-      </select>
-
-      <label for="fontsize-select">Select Font Size:</label>
-      <select v-model="selectedFontSize" id="fontsize-select">
-        <option value="16">16px</option>
-        <option value="20">20px</option>
-        <option value="24">24px</option>
-        <option value="28">28px</option>
-        <option value="32">32px</option>
-        <option value="36">36px</option>
-        <option value="40">40px</option>
-      </select>
-      <button @click="generateMeme" class="generate-button">Generate Meme</button>
-      <input type="color" v-model="textColor" />
-      <input type="range" v-model="x" />
-      <input type="range" v-model="y" />
-      <div v-if="generatedMeme">
-        <img :src="generatedMeme" alt="Generated Meme" />
-        <button @click="downloadMeme">Download Meme</button>
       </div>
     </div>
   </div>
@@ -184,6 +184,7 @@ export default {
 
 * {
   font-family: 'Acme', sans-serif;
+  color: #6a1cc3;
 }
 .main-area {
   display: flex;
@@ -241,15 +242,14 @@ export default {
   margin-right: 10px;
 }
 
-.image-grid {
-  display: flex;
+.grid {
   align-self: center;
   justify-content: space-around;
   flex-wrap: wrap;
   gap: 1rem;
 }
 
-.image-grid img {
+.grid img {
   width: 75px;
   height: auto;
   margin: 5px;

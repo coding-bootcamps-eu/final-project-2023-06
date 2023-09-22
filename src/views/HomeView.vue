@@ -4,6 +4,49 @@
     <h1>Welcome to Meme Wizard</h1>
     <p>Create hilarious memes with our easy-to-use tool.</p>
 
+    <div class="image-grid">
+      <img
+        src="https://i.imgflip.com/1g8my4.jpg"
+        @click="showImage('https://i.imgflip.com/1g8my4.jpg')"
+        alt="template 1"
+      />
+      <img
+        src="https://i.imgflip.com/22bdq6.jpg"
+        @click="showImage('https://i.imgflip.com/22bdq6.jpg')"
+        alt="template 2"
+      />
+      <img
+        src="https://i.imgflip.com/3lmzyx.jpg"
+        @click="showImage('https://i.imgflip.com/3lmzyx.jpg')"
+        alt="template 3"
+      />
+      <img
+        src="https://i.imgflip.com/43a45p.png"
+        @click="showImage('https://i.imgflip.com/43a45p.png')"
+        alt="template 4"
+      />
+      <img
+        src="https://i.imgflip.com/28j0te.jpg"
+        @click="showImage('https://i.imgflip.com/28j0te.jpg')"
+        alt="template 5"
+      />
+      <img
+        src="https://i.imgflip.com/9ehk.jpg"
+        @click="showImage('https://i.imgflip.com/9ehk.jpg')"
+        alt="template 6"
+      />
+      <img
+        src="https://i.imgflip.com/1otk96.jpg"
+        @click="showImage('https://i.imgflip.com/1otk96.jpg')"
+        alt="template 7"
+      />
+      <img
+        src="https://i.imgflip.com/2gnnjh.jpg"
+        @click="showImage('https://i.imgflip.com/2gnnjh.jpg')"
+        alt="template 8"
+      />
+    </div>
+
     <div class="main-area">
       <input v-model="imageUrl" id="uploadURL" placeholder="Paste Image URL here" />
       <div
@@ -33,7 +76,7 @@
               height: imageNaturalSize ? imageNaturalSize.height + 'px' : 'auto'
             }"
           >
-            <img :src="imageUrl" alt="Selected Image" @load="onLoad" />
+            <img :src="imageUrl" alt="Selected Image" @load="onLoadImage" />
             <textarea
               class="combinedText"
               :style="{
@@ -64,16 +107,13 @@
 
       <label for="fontsize-select">Select Font Size:</label>
       <select v-model="selectedFontSize" id="fontsize-select">
-        <option value="10">10px</option>
-        <option value="12">12px</option>
         <option value="16">16px</option>
-        <option value="18">18px</option>
         <option value="20">20px</option>
-        <option value="22">22px</option>
         <option value="24">24px</option>
-        <option value="26">26px</option>
         <option value="28">28px</option>
-        <option value="30">30px</option>
+        <option value="32">32px</option>
+        <option value="36">36px</option>
+        <option value="40">40px</option>
       </select>
       <button @click="generateMeme" class="generate-button">Generate Meme</button>
       <input type="color" v-model="textColor" />
@@ -121,18 +161,30 @@ export default {
         download(dataUrl, 'my-node.png')
       })
     },
-    onLoad(e) {
-      console.log(e.target.naturalWidth, e.target.naturalHeight)
-      this.imageNaturalSize = {
-        width: e.target.naturalWidth,
-        height: e.target.naturalHeight
+    onLoadImage() {
+      console.log('Image loaded successfully')
+      const img = new Image()
+      img.src = this.imageUrl
+      img.onload = () => {
+        this.imageNaturalSize = {
+          width: img.naturalWidth,
+          height: img.naturalHeight
+        }
       }
+    },
+    showImage(imageUrl) {
+      this.imageUrl = imageUrl
+      this.onLoadImage()
     }
   }
 }
 </script>
 <style scoped>
 @import url(https://fonts.bunny.net/css?family=acme:400|open-sans:600|quicksand:400|roboto:400|abel:400);
+
+* {
+  font-family: 'Acme', sans-serif;
+}
 .main-area {
   display: flex;
   flex-direction: column;
@@ -144,10 +196,6 @@ export default {
   overflow: hidden;
 }
 
-h1 {
-  font-family: 'Acme', sans-serif;
-}
-
 #uploadURL {
   max-width: 100%;
   height: auto;
@@ -157,11 +205,7 @@ h1 {
 .combinedText {
   position: absolute;
   color: black;
-  text-shadow:
-    -1px -1px 0 white,
-    1px -1px 0 white,
-    -1px 1px 0 white,
-    1px 1px 0 white;
+  text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
   top: 0;
   left: 0;
   width: 100%;
@@ -195,5 +239,19 @@ h1 {
 #font-select,
 #fontsize-select {
   margin-right: 10px;
+}
+
+.image-grid {
+  display: flex;
+  align-self: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.image-grid img {
+  width: 75px;
+  height: auto;
+  margin: 5px;
 }
 </style>

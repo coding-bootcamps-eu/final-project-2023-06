@@ -6,22 +6,50 @@
 
     <div class="main-area">
       <input v-model="imageUrl" id="uploadURL" placeholder="Paste Image URL here" />
-
-      <div id="my-node" v-if="imageUrl" class="imageURL">
-        <img :src="imageUrl" alt="Selected Image" />
-        <textarea
-          class="combinedText"
+      <div
+        :style="{
+          height:
+            (windowWidth / (imageNaturalSize?.width || 1)) * (imageNaturalSize?.height || 1) + 'px',
+          overflow: 'hidden',
+          width: windowWidth + 'px',
+          position: 'relative'
+        }"
+      >
+        <div
           :style="{
-            color: textColor,
-            top: y + '%',
-            left: x + '%',
-            fontFamily: selectedFont,
-            fontSize: selectedFontSize + 'px'
+            transform: `scale(${windowWidth / (imageNaturalSize?.width || 1)})`,
+            transformOrigin: 'top left',
+            top: 0,
+            left: 0,
+            position: 'absolute'
           }"
-          v-model="combinedText"
-          placeholder="Enter Text"
-        ></textarea>
+        >
+          <div
+            id="my-node"
+            v-if="imageUrl"
+            class="imageURL"
+            :style="{
+              width: imageNaturalSize ? imageNaturalSize.width + 'px' : 'auto',
+              height: imageNaturalSize ? imageNaturalSize.height + 'px' : 'auto'
+            }"
+          >
+            <img :src="imageUrl" alt="Selected Image" @load="onLoad" />
+            <textarea
+              class="combinedText"
+              :style="{
+                color: textColor,
+                top: y + '%',
+                left: x + '%',
+                fontFamily: selectedFont,
+                fontSize: selectedFontSize + 'px'
+              }"
+              v-model="combinedText"
+              placeholder="Enter Text"
+            ></textarea>
+          </div>
+        </div>
       </div>
+
       <label for="font-select">Select Font:</label>
       <select v-model="selectedFont" id="font-select">
         <option value="Arial">Arial</option>
@@ -31,6 +59,7 @@
         <option value="Roboto">Roboto</option>
         <option value="Open Sans">Open Sans</option>
         <option value="Calibri">Calibri</option>
+        <option value="Abel">Abel</option>
       </select>
 
       <label for="fontsize-select">Select Font Size:</label>
@@ -71,20 +100,39 @@ export default {
       x: 0,
       y: 0,
       selectedFont: 'Arial',
-      selectedFontSize: `10`
+      selectedFontSize: `10`,
+      imageNaturalSize: null,
+      windowWidth: 0
     }
   },
+  mounted() {
+    this.onResize()
+    window.addEventListener('resize', this.onResize)
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.onResize)
+  },
   methods: {
+    onResize() {
+      this.windowWidth = window.innerWidth
+    },
     generateMeme() {
       htmlToImage.toPng(document.getElementById('my-node')).then(function (dataUrl) {
         download(dataUrl, 'my-node.png')
       })
+    },
+    onLoad(e) {
+      console.log(e.target.naturalWidth, e.target.naturalHeight)
+      this.imageNaturalSize = {
+        width: e.target.naturalWidth,
+        height: e.target.naturalHeight
+      }
     }
   }
 }
 </script>
 <style scoped>
-@import url(https://fonts.bunny.net/css?family=acme:400|open-sans:600|quicksand:400|roboto:400);
+@import url(https://fonts.bunny.net/css?family=acme:400|open-sans:600|quicksand:400|roboto:400|abel:400);
 .main-area {
   display: flex;
   flex-direction: column;
@@ -109,7 +157,11 @@ h1 {
 .combinedText {
   position: absolute;
   color: black;
-  text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
+  text-shadow:
+    -1px -1px 0 white,
+    1px -1px 0 white,
+    -1px 1px 0 white,
+    1px 1px 0 white;
   top: 0;
   left: 0;
   width: 100%;

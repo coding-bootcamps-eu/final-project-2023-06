@@ -6,6 +6,12 @@
 
     <div class="main-area">
       <input v-model="imageUrl" id="uploadURL" placeholder="Paste Image URL here" />
+      <div v-if="showUrl">
+        <p>
+          Die URL ist: <a :href="filePath" target="_blank">{{ filePath }}</a>
+        </p>
+        <button @click="copyUrlToClipboard">URL kopieren</button>
+      </div>
       <div
         :style="{
           height:
@@ -76,6 +82,7 @@
         <option value="30">30px</option>
       </select>
       <button @click="generateMeme" class="generate-button">Generate Meme</button>
+      <button @click="shareMeme" class="share-button">Share Meme</button>
       <input type="color" v-model="textColor" />
       <input type="range" v-model="x" />
       <input type="range" v-model="y" />
@@ -102,7 +109,9 @@ export default {
       selectedFont: 'Arial',
       selectedFontSize: `10`,
       imageNaturalSize: null,
-      windowWidth: 0
+      windowWidth: 0,
+      filePath: '',
+      showUrl: false
     }
   },
   mounted() {
@@ -127,6 +136,39 @@ export default {
         width: e.target.naturalWidth,
         height: e.target.naturalHeight
       }
+    },
+    shareMeme(fileInput) {
+      const myHeaders = new Headers()
+      myHeaders.append('Content-Type', 'multipart/form-data')
+
+      const formdata = new FormData()
+      formdata.append('file', fileInput.files[0], 'my-node.png')
+
+      const requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: formdata,
+        redirect: 'follow'
+      }
+
+      fetch('https://23-juni.api.cbe.uber.space/upload', requestOptions)
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result)
+          
+          const filePath = result.filePath
+          console.log('Teile dieses Image:', filePath)
+        })
+        .catch((error) => console.log('error', error))
+    },
+    copyUrlToClipboard() {
+      const el = document.createElement('textarea')
+      el.value = this.filePath
+      document.body.appendChild(el)
+      el.select()
+      document.execCommand('copy')
+      document.body.removeChild(el)
+      // navigator.clipboard.writeText(this.filePath) kürzer?
     }
   }
 }

@@ -1,10 +1,15 @@
 <template>
   <nav>
-    <router-link to="/">Generate Meme</router-link> |
-    <router-link to="/template">Templates</router-link> |
-    <router-link to="/new">New Memes</router-link> |
-    <router-link to="/about">About Us</router-link>
+    <ul>
+      <li><router-link to="/">Generate Meme</router-link></li>
+      <li><router-link to="/template">Templates</router-link></li>
+      <li><router-link to="/new">New Memes</router-link></li>
+    </ul>
+    <ul>
+      <li><router-link to="/about">About Us</router-link></li>
+    </ul>
   </nav>
+
   <router-view />
 </template>
 
@@ -27,6 +32,6 @@ nav a {
 }
 
 nav a.router-link-exact-active {
-  color: #42b983;
+  color: #6A15C4;
 }
 </style>

@@ -4,7 +4,7 @@
     <h1>Welcome to Meme Wizard</h1>
     <p>Create hilarious memes with our easy-to-use tool.</p>
 
-    <div class="grid">
+    <div class="template-grid">
       <img
         src="https://i.imgflip.com/1g8my4.jpg"
         @click="showImage('https://i.imgflip.com/1g8my4.jpg')"
@@ -206,7 +206,11 @@ export default {
 .combinedText {
   position: absolute;
   color: black;
-  text-shadow: -1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white;
+  text-shadow:
+    -1px -1px 0 white,
+    1px -1px 0 white,
+    -1px 1px 0 white,
+    1px 1px 0 white;
   top: 0;
   left: 0;
   width: 100%;
@@ -242,16 +246,28 @@ export default {
   margin-right: 10px;
 }
 
-.grid {
-  align-self: center;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  gap: 1rem;
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
 }
 
-.grid img {
+.template-grid img {
+  aspect-ratio: 1;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+@media (max-width: 512px) {
+  .template-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+/* .grid img {
   width: 75px;
   height: auto;
   margin: 5px;
-}
+} */
 </style>

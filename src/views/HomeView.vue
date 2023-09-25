@@ -124,9 +124,9 @@
 
       <label for="color">Text Color</label>
       <input type="color" v-model="textColor" />
-      <label for="range">x-axis</label>
+      <label for="range">X-Axis (slide your Text right/left)</label>
       <input class="axis" type="range" v-model="x" />
-      <label for="range">y-axis</label>
+      <label for="range">Y-Axis (slide your Text up/down)</label>
       <input class="axis" type="range" v-model="y" />
       <div v-if="generatedMeme">
         <img :src="generatedMeme" alt="Generated Meme" />
@@ -297,6 +297,11 @@ export default {
 
 .axis {
   padding: 1rem;
+}
+
+.home {
+  align-content: center;
+  text-align: center;
 }
 
 .template-grid {

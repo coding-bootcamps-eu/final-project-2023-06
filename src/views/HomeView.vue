@@ -175,6 +175,10 @@ export default {
     },
     async generateMeme() {
       try {
+        // This might look weird, but is necessary to ensure the image is loaded in safari
+        await htmlToImage.toPng(document.getElementById('my-node'))
+        await htmlToImage.toPng(document.getElementById('my-node'))
+        await htmlToImage.toPng(document.getElementById('my-node'))
         const dataUrl = await htmlToImage.toPng(document.getElementById('my-node'))
 
         await download(dataUrl, 'my-node.png')
@@ -195,6 +199,9 @@ export default {
       }
     },
     async shareMeme() {
+      await htmlToImage.toBlob(document.getElementById('my-node'))
+      await htmlToImage.toBlob(document.getElementById('my-node'))
+      await htmlToImage.toBlob(document.getElementById('my-node'))
       const blob = await htmlToImage.toBlob(document.getElementById('my-node'))
       const myHeaders = new Headers()
 

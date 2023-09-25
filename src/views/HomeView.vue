@@ -15,15 +15,15 @@
       <div
         :style="{
           height:
-            (windowWidth / (imageNaturalSize?.width || 1)) * (imageNaturalSize?.height || 1) + 'px',
+            (canvasWidth / (imageNaturalSize?.width || 0)) * (imageNaturalSize?.height || 1) + 'px',
           overflow: 'hidden',
-          width: windowWidth + 'px',
+          width: canvasWidth + 'px',
           position: 'relative'
         }"
       >
         <div
           :style="{
-            transform: `scale(${windowWidth / (imageNaturalSize?.width || 1)})`,
+            transform: `scale(${canvasWidth / (imageNaturalSize?.width || 1)})`,
             transformOrigin: 'top left',
             top: 0,
             left: 0,
@@ -121,6 +121,11 @@ export default {
   beforeUnmount() {
     window.removeEventListener('resize', this.onResize)
   },
+  computed: {
+    canvasWidth() {
+      return Math.min(this.windowWidth, this.imageNaturalSize?.width || 0, 1024)
+    }
+  },
   methods: {
     onResize() {
       this.windowWidth = window.innerWidth
@@ -155,7 +160,7 @@ export default {
         .then((response) => response.json())
         .then((result) => {
           console.log(result)
-          
+
           const filePath = result.filePath
           console.log('Teile dieses Image:', filePath)
         })

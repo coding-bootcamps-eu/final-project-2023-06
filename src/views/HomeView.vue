@@ -122,8 +122,10 @@
       </select>
 
       <input type="color" v-model="textColor" />
-      <input type="range" v-model="x" />
-      <input type="range" v-model="y" />
+      <label for="range">x-axis</label>
+      <input class="axis" type="range" v-model="x" />
+      <label for="range">y-axis</label>
+      <input class="axis" type="range" v-model="y" />
       <div v-if="generatedMeme">
         <img :src="generatedMeme" alt="Generated Meme" />
         <button @click="downloadMeme">Download Meme</button>
@@ -282,6 +284,10 @@ export default {
 #font-select,
 #fontsize-select {
   margin-right: 10px;
+}
+
+.axis {
+  padding: 1rem;
 }
 
 .template-grid {

@@ -49,44 +49,6 @@
 
     <div class="main-area">
       <input v-model="imageUrl" id="uploadURL" placeholder="Paste Image URL here" />
-      <div v-if="showUrl">
-        <p>
-          Die URL ist: <a :href="filePath" target="_blank">{{ filePath }}</a>
-        </p>
-        <button @click="copyUrlToClipboard">URL kopieren</button>
-      </div>
-      <label for="font-select">Select Font:</label>
-      <select v-model="selectedFont" id="font-select">
-        <option value="Arial">Arial</option>
-        <option value="Verdana">Verdana</option>
-        <option value="Helvetica">Helvetica</option>
-        <option value="Times New Roman">Times New Roman</option>
-        <option value="Roboto">Roboto</option>
-        <option value="Open Sans">Open Sans</option>
-        <option value="Calibri">Calibri</option>
-        <option value="Abel">Abel</option>
-      </select>
-
-      <label for="fontsize-select">Select Font Size:</label>
-      <select v-model="selectedFontSize" id="fontsize-select">
-        <option value="16">16px</option>
-        <option value="20">20px</option>
-        <option value="24">24px</option>
-        <option value="28">28px</option>
-        <option value="32">32px</option>
-        <option value="36">36px</option>
-        <option value="40">40px</option>
-      </select>
-      <button @click="generateMeme" class="generate-button">Generate Meme</button>
-      <button @click="shareMeme" class="share-button">Share Meme</button>
-      <input type="color" v-model="textColor" />
-      <input type="range" v-model="x" />
-      <input type="range" v-model="y" />
-      <div v-if="generatedMeme">
-        <img :src="generatedMeme" alt="Generated Meme" />
-        <button @click="downloadMeme">Download Meme</button>
-      </div>
-
       <div
         :style="{
           height:
@@ -130,6 +92,44 @@
           </div>
         </div>
       </div>
+      <div v-if="filePath">
+        <p>
+          Die URL ist: <a :href="filePath" target="_blank">{{ filePath }}</a>
+        </p>
+        <button @click="copyUrlToClipboard">URL kopieren</button>
+      </div>
+      <label for="font-select">Select Font:</label>
+      <select v-model="selectedFont" id="font-select">
+        <option value="Arial">Arial</option>
+        <option value="Verdana">Verdana</option>
+        <option value="Helvetica">Helvetica</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Roboto">Roboto</option>
+        <option value="Open Sans">Open Sans</option>
+        <option value="Calibri">Calibri</option>
+        <option value="Abel">Abel</option>
+      </select>
+
+      <label for="fontsize-select">Select Font Size:</label>
+      <select v-model="selectedFontSize" id="fontsize-select">
+        <option value="16">16px</option>
+        <option value="20">20px</option>
+        <option value="24">24px</option>
+        <option value="28">28px</option>
+        <option value="32">32px</option>
+        <option value="36">36px</option>
+        <option value="40">40px</option>
+      </select>
+
+      <input type="color" v-model="textColor" />
+      <input type="range" v-model="x" />
+      <input type="range" v-model="y" />
+      <div v-if="generatedMeme">
+        <img :src="generatedMeme" alt="Generated Meme" />
+        <button @click="downloadMeme">Download Meme</button>
+      </div>
+      <button @click="generateMeme" class="generate-button">Download</button>
+      <button @click="shareMeme" class="share-button">Generate URL</button>
     </div>
   </div>
 </template>
@@ -147,7 +147,7 @@ export default {
       x: 0,
       y: 0,
       selectedFont: 'Arial',
-      selectedFontSize: `10`,
+      selectedFontSize: `30`,
       imageNaturalSize: null,
       windowWidth: 0,
       filePath: '',
@@ -170,10 +170,15 @@ export default {
     onResize() {
       this.windowWidth = window.innerWidth
     },
-    generateMeme() {
-      htmlToImage.toPng(document.getElementById('my-node')).then(function (dataUrl) {
-        download(dataUrl, 'my-node.png')
-      })
+    async generateMeme() {
+      try {
+        const dataUrl = await htmlToImage.toPng(document.getElementById('my-node'))
+
+        await download(dataUrl, 'my-node.png')
+      } catch (error) {
+        console.error(error)
+        alert(error)
+      }
     },
     onLoadImage() {
       console.log('Image loaded successfully')
@@ -186,12 +191,12 @@ export default {
         }
       }
     },
-    shareMeme(fileInput) {
+    async shareMeme() {
+      const blob = await htmlToImage.toBlob(document.getElementById('my-node'))
       const myHeaders = new Headers()
-      myHeaders.append('Content-Type', 'multipart/form-data')
 
       const formdata = new FormData()
-      formdata.append('file', fileInput.files[0], 'my-node.png')
+      formdata.append('file', blob, 'my-node.png')
 
       const requestOptions = {
         method: 'POST',
@@ -205,10 +210,10 @@ export default {
         .then((result) => {
           console.log(result)
 
-          const filePath = result.filePath
-          console.log('Teile dieses Image:', filePath)
+          this.filePath = result.filePath
+          console.log('Teile dieses Image:', this.filePath)
         })
-        .catch((error) => console.log('error', error))
+        .catch((error) => alert(error.toString()))
     },
     copyUrlToClipboard() {
       const el = document.createElement('textarea')
@@ -248,18 +253,14 @@ export default {
 
 .combinedText {
   position: absolute;
-  color: black;
-  text-shadow:
-    -1px -1px 0 white,
-    1px -1px 0 white,
-    -1px 1px 0 white,
-    1px 1px 0 white;
+  font-weight: 800;
+  -webkit-text-stroke-width: 1.5px;
+  -webkit-text-stroke-color: black;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   padding: 10px;
-  border: 1px solid #000;
   background-color: transparent;
   border-color: transparent;
   box-sizing: border-box;

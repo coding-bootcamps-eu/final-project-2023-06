@@ -12,7 +12,7 @@
     </nav>
   </header>
 
-  <main class="container-fluid">
+  <main class="container">
     <router-view />
   </main>
 </template>

@@ -90,8 +90,12 @@
               v-model="firstText"
               placeholder="Enter first Text"
             ></textarea>
+            <label for="showSecondTextbox">Show Second Textbox</label>
+            <input type="checkbox" id="showSecondTextbox" v-model="showSecondTextbox" />
+
             <textarea
               class="secondText combinedText"
+              v-if="showSecondTextbox"
               :style="{
                 color: secondTextColor,
                 top: y2 + '%',
@@ -112,7 +116,7 @@
         </p>
         <button @click="copyUrlToClipboard">URL kopieren</button>
       </div>
-
+            <button @click="toggleSecondTextbox">Want a second Textbox?</button>
       <label for="font-select">Select Font:</label>
       <select v-model="selectedFont" id="font-select">
         <option value="Arial">Arial</option>
@@ -146,7 +150,7 @@
           <input class="axis" type="range" v-model="y1" />
         </div>
 
-        <div>
+        <div v-if="showSecondTextbox">
           <label for="color">Text Color second Text</label>
           <input type="color" v-model="secondTextColor" />
           <label for="range">X-Axis (slide your Text right/left)</label>
@@ -160,7 +164,7 @@
         <img :src="generatedMeme" alt="Generated Meme" />
         <button @click="downloadMeme">Download Meme</button>
       </div>
-      <button @click="generateMeme" class="generate-button">Download</button>
+      <button @click="generateMeme" class="generate-button" v-if="imageUrl">Download</button>
       <button @click="shareMeme" class="share-button">Generate URL</button>
     </div>
   </div>
@@ -173,7 +177,7 @@ export default {
   data() {
     return {
       imageUrl: '',
-      /*combinedText: '',*/ 
+      /*combinedText: '',*/
       firstText: '', // Datenfeld für den ersten Text
       secondText: '', // Datenfeld für den zweiten Text
       generatedMeme: null,
@@ -188,7 +192,8 @@ export default {
       imageNaturalSize: null,
       windowWidth: 0,
       filePath: '',
-      showUrl: false
+      showUrl: false,
+      showSecondTextbox: false
     }
   },
   mounted() {
@@ -271,6 +276,9 @@ export default {
     showImage(imageUrl) {
       this.imageUrl = imageUrl
       this.onLoadImage()
+    },
+    toggleSecondTextbox() {
+      this.showSecondTextbox = !this.showSecondTextbox
     }
   }
 }

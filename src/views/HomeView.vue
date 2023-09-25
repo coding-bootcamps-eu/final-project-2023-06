@@ -122,6 +122,7 @@
         <option value="40">40px</option>
       </select>
 
+      <label for="color">Text Color</label>
       <input type="color" v-model="textColor" />
       <label for="range">x-axis</label>
       <input class="axis" type="range" v-model="x" />

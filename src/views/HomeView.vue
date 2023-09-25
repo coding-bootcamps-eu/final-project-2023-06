@@ -4,6 +4,49 @@
     <h1>Welcome to Meme Wizard</h1>
     <p>Create hilarious memes with our easy-to-use tool.</p>
 
+    <div class="template-grid">
+      <img
+        src="https://i.imgflip.com/1g8my4.jpg"
+        @click="showImage('https://i.imgflip.com/1g8my4.jpg')"
+        alt="template 1"
+      />
+      <img
+        src="https://i.imgflip.com/22bdq6.jpg"
+        @click="showImage('https://i.imgflip.com/22bdq6.jpg')"
+        alt="template 2"
+      />
+      <img
+        src="https://i.imgflip.com/3lmzyx.jpg"
+        @click="showImage('https://i.imgflip.com/3lmzyx.jpg')"
+        alt="template 3"
+      />
+      <img
+        src="https://i.imgflip.com/43a45p.png"
+        @click="showImage('https://i.imgflip.com/43a45p.png')"
+        alt="template 4"
+      />
+      <img
+        src="https://i.imgflip.com/28j0te.jpg"
+        @click="showImage('https://i.imgflip.com/28j0te.jpg')"
+        alt="template 5"
+      />
+      <img
+        src="https://i.imgflip.com/9ehk.jpg"
+        @click="showImage('https://i.imgflip.com/9ehk.jpg')"
+        alt="template 6"
+      />
+      <img
+        src="https://i.imgflip.com/1otk96.jpg"
+        @click="showImage('https://i.imgflip.com/1otk96.jpg')"
+        alt="template 7"
+      />
+      <img
+        src="https://i.imgflip.com/2gnnjh.jpg"
+        @click="showImage('https://i.imgflip.com/2gnnjh.jpg')"
+        alt="template 8"
+      />
+    </div>
+
     <div class="main-area">
       <input v-model="imageUrl" id="uploadURL" placeholder="Paste Image URL here" />
       <div v-if="showUrl">
@@ -12,6 +55,38 @@
         </p>
         <button @click="copyUrlToClipboard">URL kopieren</button>
       </div>
+      <label for="font-select">Select Font:</label>
+      <select v-model="selectedFont" id="font-select">
+        <option value="Arial">Arial</option>
+        <option value="Verdana">Verdana</option>
+        <option value="Helvetica">Helvetica</option>
+        <option value="Times New Roman">Times New Roman</option>
+        <option value="Roboto">Roboto</option>
+        <option value="Open Sans">Open Sans</option>
+        <option value="Calibri">Calibri</option>
+        <option value="Abel">Abel</option>
+      </select>
+
+      <label for="fontsize-select">Select Font Size:</label>
+      <select v-model="selectedFontSize" id="fontsize-select">
+        <option value="16">16px</option>
+        <option value="20">20px</option>
+        <option value="24">24px</option>
+        <option value="28">28px</option>
+        <option value="32">32px</option>
+        <option value="36">36px</option>
+        <option value="40">40px</option>
+      </select>
+      <button @click="generateMeme" class="generate-button">Generate Meme</button>
+      <button @click="shareMeme" class="share-button">Share Meme</button>
+      <input type="color" v-model="textColor" />
+      <input type="range" v-model="x" />
+      <input type="range" v-model="y" />
+      <div v-if="generatedMeme">
+        <img :src="generatedMeme" alt="Generated Meme" />
+        <button @click="downloadMeme">Download Meme</button>
+      </div>
+
       <div
         :style="{
           height:
@@ -39,7 +114,7 @@
               height: imageNaturalSize ? imageNaturalSize.height + 'px' : 'auto'
             }"
           >
-            <img :src="imageUrl" alt="Selected Image" @load="onLoad" />
+            <img :src="imageUrl" alt="Selected Image" @load="onLoadImage" />
             <textarea
               class="combinedText"
               :style="{
@@ -54,41 +129,6 @@
             ></textarea>
           </div>
         </div>
-      </div>
-
-      <label for="font-select">Select Font:</label>
-      <select v-model="selectedFont" id="font-select">
-        <option value="Arial">Arial</option>
-        <option value="Verdana">Verdana</option>
-        <option value="Helvetica">Helvetica</option>
-        <option value="Times New Roman">Times New Roman</option>
-        <option value="Roboto">Roboto</option>
-        <option value="Open Sans">Open Sans</option>
-        <option value="Calibri">Calibri</option>
-        <option value="Abel">Abel</option>
-      </select>
-
-      <label for="fontsize-select">Select Font Size:</label>
-      <select v-model="selectedFontSize" id="fontsize-select">
-        <option value="10">10px</option>
-        <option value="12">12px</option>
-        <option value="16">16px</option>
-        <option value="18">18px</option>
-        <option value="20">20px</option>
-        <option value="22">22px</option>
-        <option value="24">24px</option>
-        <option value="26">26px</option>
-        <option value="28">28px</option>
-        <option value="30">30px</option>
-      </select>
-      <button @click="generateMeme" class="generate-button">Generate Meme</button>
-      <button @click="shareMeme" class="share-button">Share Meme</button>
-      <input type="color" v-model="textColor" />
-      <input type="range" v-model="x" />
-      <input type="range" v-model="y" />
-      <div v-if="generatedMeme">
-        <img :src="generatedMeme" alt="Generated Meme" />
-        <button @click="downloadMeme">Download Meme</button>
       </div>
     </div>
   </div>
@@ -135,11 +175,15 @@ export default {
         download(dataUrl, 'my-node.png')
       })
     },
-    onLoad(e) {
-      console.log(e.target.naturalWidth, e.target.naturalHeight)
-      this.imageNaturalSize = {
-        width: e.target.naturalWidth,
-        height: e.target.naturalHeight
+    onLoadImage() {
+      console.log('Image loaded successfully')
+      const img = new Image()
+      img.src = this.imageUrl
+      img.onload = () => {
+        this.imageNaturalSize = {
+          width: img.naturalWidth,
+          height: img.naturalHeight
+        }
       }
     },
     shareMeme(fileInput) {
@@ -174,12 +218,17 @@ export default {
       document.execCommand('copy')
       document.body.removeChild(el)
       // navigator.clipboard.writeText(this.filePath) kürzer?
+    },
+    showImage(imageUrl) {
+      this.imageUrl = imageUrl
+      this.onLoadImage()
     }
   }
 }
 </script>
 <style scoped>
 @import url(https://fonts.bunny.net/css?family=acme:400|open-sans:600|quicksand:400|roboto:400|abel:400);
+
 .main-area {
   display: flex;
   flex-direction: column;
@@ -189,10 +238,6 @@ export default {
   position: relative;
   display: inline-block;
   overflow: hidden;
-}
-
-h1 {
-  font-family: 'Acme', sans-serif;
 }
 
 #uploadURL {
@@ -222,25 +267,44 @@ h1 {
 }
 
 .generate-button {
-  background-color: #6a1cc3;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  max-width: 12.5rem;
+  /* background-color: #6a1cc3; */
+  /* color: white; */
 }
 .generate-button:hover {
-  background-color: #9eb3c2;
+  /* background-color: #9eb3c2; */
 }
 .generate-button:focus {
   outline: none;
-  box-shadow: 0 0 3px 2px rgba(0, 123, 255, 0.5);
+  /* box-shadow: 0 0 3px 2px rgba(0, 123, 255, 0.5); */
 }
 
 #font-select,
 #fontsize-select {
   margin-right: 10px;
 }
+
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.template-grid img {
+  aspect-ratio: 1;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+@media (max-width: 512px) {
+  .template-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+/* .grid img {
+  width: 75px;
+  height: auto;
+  margin: 5px;
+} */
 </style>

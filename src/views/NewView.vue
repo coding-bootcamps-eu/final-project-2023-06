@@ -36,7 +36,7 @@ export default {
 
 <style scoped>
 .image-grid {
-  display: flex;
+  display: grid;
   flex-wrap: wrap;
   justify-content: center;
   gap: 40px;
@@ -49,7 +49,14 @@ export default {
 }
 
 .image-tile img {
-  width: 60%;
+  width: 50%;
   height: auto;
 }
+
+@media (max-width: 768px) {
+  .image-tile img {
+    width: 80%;
+  }
+}
+
 </style>

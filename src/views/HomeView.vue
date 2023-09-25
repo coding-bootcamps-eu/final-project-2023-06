@@ -78,17 +78,30 @@
           >
             <img :src="imageUrl" alt="Selected Image" @load="onLoadImage" />
             <textarea
-              class="combinedText"
+              class="firstText combinedText"
               :style="{
-                color: textColor,
-                top: y + '%',
-                left: x + '%',
+                color: firstTextColor,
+                top: y1 + '%',
+                left: x1 + '%',
                 fontFamily: selectedFont,
                 fontSize: selectedFontSize + 'px',
-                outline: none
+                outline: 'none'
               }"
-              v-model="combinedText"
-              placeholder="Enter Text"
+              v-model="firstText"
+              placeholder="Enter first Text"
+            ></textarea>
+            <textarea
+              class="secondText combinedText"
+              :style="{
+                color: secondTextColor,
+                bottom: y2 + '%',
+                right: x2 + '%',
+                fontFamily: selectedFont,
+                fontSize: selectedFontSize + 'px',
+                outline: 'none'
+              }"
+              v-model="secondText"
+              placeholder="Enter second Text"
             ></textarea>
           </div>
         </div>
@@ -99,6 +112,7 @@
         </p>
         <button @click="copyUrlToClipboard">URL kopieren</button>
       </div>
+
       <label for="font-select">Select Font:</label>
       <select v-model="selectedFont" id="font-select">
         <option value="Arial">Arial</option>
@@ -122,12 +136,26 @@
         <option value="40">40px</option>
       </select>
 
-      <label for="color">Text Color</label>
-      <input type="color" v-model="textColor" />
-      <label for="range">X-Axis (slide your Text right/left)</label>
-      <input class="axis" type="range" v-model="x" />
-      <label for="range">Y-Axis (slide your Text up/down)</label>
-      <input class="axis" type="range" v-model="y" />
+      <div class="controls-select">
+        <div>
+          <label for="color">Text Color first Text</label>
+          <input type="color" v-model="firstTextColor" />
+          <label for="range">X-Axis (slide your Text right/left)</label>
+          <input class="axis" type="range" v-model="x1" />
+          <label for="range">Y-Axis (slide your Text up/down)</label>
+          <input class="axis" type="range" v-model="y1" />
+        </div>
+
+        <div>
+          <label for="color">Text Color second Text</label>
+          <input type="color" v-model="secondTextColor" />
+          <label for="range">X-Axis (slide your Text right/left)</label>
+          <input class="axis" type="range" v-model="x2" />
+          <label for="range">Y-Axis (slide your Text up/down)</label>
+          <input class="axis" type="range" v-model="y2" />
+        </div>
+      </div>
+
       <div v-if="generatedMeme">
         <img :src="generatedMeme" alt="Generated Meme" />
         <button @click="downloadMeme">Download Meme</button>
@@ -145,11 +173,16 @@ export default {
   data() {
     return {
       imageUrl: '',
-      combinedText: '',
+      /*combinedText: '',*/ 
+      firstText: '', // Datenfeld für den ersten Text
+      secondText: '', // Datenfeld für den zweiten Text
       generatedMeme: null,
-      textColor: '#ffffff',
-      x: 0,
-      y: 0,
+      firstTextColor: '#ffffff', // Textfarbe für den ersten Text
+      secondTextColor: '#ffffff', // Textfarbe für den zweiten Text
+      x1: 0, // X-Position für den ersten Text
+      y1: 0, // Y-Position für den ersten Text
+      x2: 0, // X-Position für den zweiten Text
+      y2: 0, // Y-Position für den zweiten Text
       selectedFont: 'Arial',
       selectedFontSize: `30`,
       imageNaturalSize: null,
@@ -302,6 +335,12 @@ export default {
 .home {
   align-content: center;
   text-align: center;
+}
+.controls-select {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 3rem;
 }
 
 .template-grid {

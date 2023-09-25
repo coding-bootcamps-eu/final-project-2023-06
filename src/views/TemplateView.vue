@@ -45,6 +45,11 @@ export default {
 </script>
 
 <style scoped>
+
+.memes-container {
+  align-content: center;
+  text-align: center;
+}
 .memes-grid {
   --gap: 3rem;
   --num-cols: 3;

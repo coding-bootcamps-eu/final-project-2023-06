@@ -94,8 +94,8 @@
               class="secondText combinedText"
               :style="{
                 color: secondTextColor,
-                bottom: y2 + '%',
-                right: x2 + '%',
+                top: y2 + '%',
+                left: x2 + '%',
                 fontFamily: selectedFont,
                 fontSize: selectedFontSize + 'px',
                 outline: 'none'
@@ -182,7 +182,7 @@ export default {
       x1: 0, // X-Position für den ersten Text
       y1: 0, // Y-Position für den ersten Text
       x2: 0, // X-Position für den zweiten Text
-      y2: 0, // Y-Position für den zweiten Text
+      y2: 50, // Y-Position für den zweiten Text
       selectedFont: 'Arial',
       selectedFontSize: `30`,
       imageNaturalSize: null,

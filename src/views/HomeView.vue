@@ -84,7 +84,8 @@
                 top: y + '%',
                 left: x + '%',
                 fontFamily: selectedFont,
-                fontSize: selectedFontSize + 'px'
+                fontSize: selectedFontSize + 'px',
+                outline: none
               }"
               v-model="combinedText"
               placeholder="Enter Text"
